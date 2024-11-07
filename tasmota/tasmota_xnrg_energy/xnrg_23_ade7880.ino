@@ -292,6 +292,7 @@ struct Ade7880 {
   bool calib_frequency;
   bool irq0_state;
   uint8_t cycle_count;
+  uint32_t last_cycle_ms = millis();
   uint8_t watchdog;
 } Ade7880;
 
@@ -559,6 +560,23 @@ void Ade7880Cycle(void) {
     int32_t active_energy = Ade7880ReadVerify(ADE7880_AWATTHR + phase);    // 0xE400 - 0xFFFFFF8F = -0.112
     Energy->kWhtoday_delta[phase] += active_energy * 24576 / 3600;          // Using int32_t allows loads up to 87kW (0x7FFFFFFF / 24576)
   }
+
+  // Energy of instantaneous water heater only flows from phase 1 -> phase 2 and phase 2 -> phase 3
+  // The switch between phase 3 -> phase 1 is assumed as open due to my use of only 42°C max temparture
+  // So the average voltage is determed by phase 1 and 2 as well as phase 2 and 3
+  Energy->voltage[3] = (Energy->voltage[0] + Energy->voltage[1] * 2 + Energy->voltage[2]) / 4;
+  Energy->current[3] = Ade7880.neutral_current;
+  // Check the current due it's pure inductive behavior without load
+  if (Energy->current[3] < 0.1) {
+    // active power is zero (only reactive components)
+    Energy->active_power[3] = 0;
+  } else {
+    // Due to it's 2-phase characteristic the voltage has to be doubled (powerfactor = 1 due to resistors)
+    Energy->active_power[3] = Energy->voltage[3] * 2 * Energy->current[3];
+  }
+  Energy->kWhtoday_delta[3] += (int32_t)(Energy->active_power[3] * (millis() - Ade7880.last_cycle_ms) / 36); // deca micro Wh
+  Ade7880.last_cycle_ms = millis();
+
   EnergyUpdateToday();
 
 #ifdef ADE7880_PROFILING
@@ -771,10 +789,14 @@ bool Ade7880Command(void) {
 #ifdef ADE7880_MORE_REGS
 void Ade7880Show(bool json) {
   if (json) {
-    ResponseAppend_P(PSTR(",\"" D_JSON_CURRENT_NEUTRAL "\":%s"), EnergyFmt(&Ade7880.neutral_current, Settings->flag2.current_resolution, 1));
+    //ResponseAppend_P(PSTR(",\"" D_JSON_CURRENT_NEUTRAL "\":%s"), EnergyFmt(&Ade7880.neutral_current, Settings->flag2.current_resolution, 1));
 #ifdef USE_WEBSERVER
   } else {
-    WSContentSend_PD(HTTP_SNS_CURRENT_N, WebEnergyFmt(&Ade7880.neutral_current, Settings->flag2.current_resolution, 1));
+    WSContentSend_PD(HTTP_SNS_VOLTAGE_N, WebEnergyFmt(&Energy->voltage[3], Settings->flag2.voltage_resolution, 1));
+    WSContentSend_PD(HTTP_SNS_CURRENT_N, WebEnergyFmt(&Energy->current[3], Settings->flag2.current_resolution, 1));
+    WSContentSend_PD(HTTP_SNS_ACPOWER_N, WebEnergyFmt(&Energy->active_power[3], Settings->flag2.wattage_resolution, 1));
+    //WSContentSend_PD(HTTP_SNS_ENERGY_N, WebEnergyFmt(&Ade7880.neutral_energy, Settings->flag2.energy_resolution, 1));
+    //WSContentSend_PD(HTTP_SNS_ENERGY_TOTAL, WebEnergyFmt(&Energy->active_power[3], Settings->flag2.energy_resolution, 1));
 #endif  // USE_WEBSERVER
   }
 }

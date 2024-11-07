@@ -22,13 +22,14 @@ sdkconfig.*
 data
 unpacked_fs
 unpacked_boards
-tasmota/user_config_override.h
+#tasmota/user_config_override.h
 variants
 variants3
 build
 build_output/*
 firmware.map
 firmware.asm
+firmware*.bin
 tasmota/tasmota.ino.cpp
 platformio_override.ini
 platformio_tasmota_cenv.ini

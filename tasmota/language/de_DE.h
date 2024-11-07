@@ -81,7 +81,10 @@
 #define D_COUNTER "Zähler"
 #define D_CT_POWER "CT Power"
 #define D_CURRENT "Strom"            // As in Voltage and Current
-#define D_CURRENT_NEUTRAL "Strom Neutral"
+#define D_VOLTAGE_NEUTRAL "Spannung Warmwasser"
+#define D_CURRENT_NEUTRAL "Strom Warmwasser"
+#define D_ACPOWER_NEUTRAL "Leistung Warmwasser"
+#define D_ENERGY_NEUTRAL "Energie Warmwasser"
 #define D_DATA "Daten"
 #define D_DARKLIGHT "dunkel"
 #define D_DEBUG "debug"
