@@ -764,7 +764,7 @@ void CmndEnergyToday(void) {
     Energy->period[phase] = Energy->kWhtoday_offset[phase];
     Settings->energy_kWhtoday_ph[phase] = Energy->kWhtoday_offset[phase];
     RtcSettings.energy_kWhtoday_ph[phase] = Energy->kWhtoday_offset[phase];
-    Energy->daily[phase] = (float)Energy->kWhtoday_offset[phase] / 100000;
+    Energy->daily[phase] = (float)Energy->kWhtoday_offset[phase] / 1000000;
     if (params > 1) {
       Settings->energy_kWhtotal_time = values[1];
     }
@@ -1298,7 +1298,7 @@ void EnergyShow(bool json) {
   float active_power_sum = 0.0f;
   int negative_phases = 0;
   for (uint32_t i = 0; i < Energy->phase_count; i++) {
-    energy_yesterday_ph[i] = (float)Settings->energy_kWhyesterday_ph[i] / 100000;
+    energy_yesterday_ph[i] = (float)Settings->energy_kWhyesterday_ph[i] / 1000000;
     active_power_sum += Energy->active_power[i];
     negative_phases += (Energy->active_power[i] < 0) ? -1 : 1;
   }
