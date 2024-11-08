@@ -571,8 +571,10 @@ void Ade7880Cycle(void) {
     // active power is zero (only reactive components)
     Energy->active_power[3] = 0;
   } else {
-    // Due to it's 2-phase characteristic the voltage has to be doubled (powerfactor = 1 due to resistors)
-    Energy->active_power[3] = Energy->voltage[3] * 2 * Energy->current[3];
+    // Due to it's 2-phase characteristic the voltage has to be doubled (powerfactor estimated to 0.95)
+    Energy->active_power[3] = Energy->voltage[3] * 2 * Energy->current[3] * 0.95;
+    // Limit active power of warm water to total active power
+    Energy->active_power[3] = min(Energy->active_power[0] + Energy->active_power[1] + Energy->active_power[2], Energy->active_power[3]);
   }
   Energy->kWhtoday_delta[3] += (int32_t)(Energy->active_power[3] * (millis() - Ade7880.last_cycle_ms) / 36); // deca micro Wh
   Ade7880.last_cycle_ms = millis();
