@@ -1,0 +1,42 @@
+{
+  "state": 0,
+  "rms": {
+    "current_a": 3189237,
+    "current_b": 3123658,
+    "current_c": 3171970,
+    "current_n": 3196308,
+    "current_s": 1093030,
+    "voltage_a": -739739,
+    "voltage_b": -722832,
+    "voltage_c": -727176
+  },
+  "angles": {
+    "angle0": 128,
+    "angle1": 120,
+    "angle2": 124
+  },
+  "powers": {
+    "totactive": {
+      "a": -1401585,
+      "b": -1397446,
+      "c": -1394289
+    },
+    "apparent": {
+      "a": 631068,
+      "b": 631038,
+      "c": 631061
+    }
+  },
+  "energies": {
+    "totactive": {
+      "a": 25727,
+      "b": 25726,
+      "c": 25726
+    },
+    "apparent": {
+      "a": 61820,
+      "b": 61859,
+      "c": 61901
+    }
+  }
+}

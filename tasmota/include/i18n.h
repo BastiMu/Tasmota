@@ -1019,7 +1019,10 @@ const char HTTP_SNS_US_EPA_AQI[] PROGMEM =                    "{s}%s US EPA AQI"
 
 const char HTTP_SNS_VOLTAGE[]             PROGMEM = "{s}" D_VOLTAGE                 "{m}%s " D_UNIT_VOLT          "{e}";
 const char HTTP_SNS_CURRENT[]             PROGMEM = "{s}" D_CURRENT                 "{m}%s " D_UNIT_AMPERE        "{e}";
+const char HTTP_SNS_VOLTAGE_N[]           PROGMEM = "{s}" D_VOLTAGE_NEUTRAL         "{m}%s " D_UNIT_VOLT          "{e}";
 const char HTTP_SNS_CURRENT_N[]           PROGMEM = "{s}" D_CURRENT_NEUTRAL         "{m}%s " D_UNIT_AMPERE        "{e}";
+const char HTTP_SNS_ACPOWER_N[]           PROGMEM = "{s}" D_ACPOWER_NEUTRAL         "{m}%s " D_UNIT_WATT          "{e}";
+const char HTTP_SNS_ENERGY_N[]            PROGMEM = "{s}" D_ENERGY_NEUTRAL          "{m}%s " D_UNIT_KILOWATTHOUR  "{e}";
 const char HTTP_SNS_POWER[]               PROGMEM = "{s}" D_POWERUSAGE_ACTIVE       "{m}%s " D_UNIT_WATT          "{e}";
 const char HTTP_SNS_IMPORT_POWER[]        PROGMEM = "{s}" D_IMPORT_POWER            "{m}%s " D_UNIT_WATT          "{e}";
 const char HTTP_SNS_EXPORT_POWER[]        PROGMEM = "{s}" D_EXPORT_POWER            "{m}%s " D_UNIT_WATT          "{e}";
